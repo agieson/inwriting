@@ -26,17 +26,17 @@ class Fetch:
 
     def events(self, event="all", startBlock=None):
         if startBlock is None or startBlock == 0:
-            startBlock = hex(0)
+            startBlock = self.block
         if event.lower() == 'listed':
             return self.myContract.events.Listed.createFilter(fromBlock=f'{startBlock}').get_all_entries()
         elif event.lower() == 'bought':
             return self.myContract.events.Bought.createFilter(fromBlock=f'{startBlock}').get_all_entries()
         elif event.lower() == 'transfer':
-            return self.myContract.events.Transfer.createFilter(fromBlock=f'{hex(0)}').get_all_entries()
+            return self.myContract.events.Transfer.createFilter(fromBlock=f'{startBlock}').get_all_entries()
         elif event.lower() == 'approval':
-            return self.myContract.events.Approval.createFilter(fromBlock=f'{hex(0)}').get_all_entries()
+            return self.myContract.events.Approval.createFilter(fromBlock=f'{startBlock}').get_all_entries()
         elif event.lower() == 'ownershiptransferred':
-            return self.myContract.events.OwnershipTransferred.createFilter(fromBlock=f'{hex(0)}').get_all_entries()
+            return self.myContract.events.OwnershipTransferred.createFilter(fromBlock=f'{startBlock}').get_all_entries()
         elif event.lower() == 'mint':
             return [event for event in self.events('transfer') if int(event['args']['from'], 16) == 0]
         elif event.lower() == 'notmint':
@@ -121,7 +121,7 @@ if __name__ == '__main__':
     block = 14536393  # block where In Writing contract was deployed
     network = 'main'
 
-    fetch = Fetch(provider, contract_address, path_to_abi, 14536393, etherscan_key, 'main')
+    fetch = Fetch(provider, contract_address, path_to_abi, 14536393, etherscan_key, 'main')  # initialize fetch object
 
     out = fetch.functions()
 
